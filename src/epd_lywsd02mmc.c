@@ -116,10 +116,11 @@ typedef enum {
 	SYMB_L,
 	SYMB_o,
 	SYMB_U,
+	SYMB_r,
 	SYMB_MAX
 } SYMB_NUM_e;
 
-const u8 digits[21][DEF_LYWSD02MMC_SUMBOL_SIGMENTS + 1] = {
+const u8 digits[22][DEF_LYWSD02MMC_SUMBOL_SIGMENTS + 1] = {
     {1, 2, 3, 4, 5, 6, 0, 0}, // 0
     {2, 3, 0, 0, 0, 0, 0, 0}, // 1
     {1, 2, 4, 5, 7, 0, 0, 0}, // 2
@@ -141,7 +142,11 @@ const u8 digits[21][DEF_LYWSD02MMC_SUMBOL_SIGMENTS + 1] = {
     {4, 5, 6, 0, 0, 0, 0, 0}, // L
     {3, 4, 5, 7, 0, 0, 0, 0}, // o
     {2, 3, 4, 5, 6, 0, 0, 0}, // U
+    {5, 7, 0, 0, 0, 0, 0, 0}, // r
 };
+
+#define LCD_SYM_E	SYMB_E
+#define LCD_SYM_r	SYMB_r
 
 //----------------------------------
 // define segments
@@ -370,6 +375,12 @@ static void show_s1_number_x100(s32 number, u8 atr){
 	u8 buf[5] = {0};
 	clear_s1();
 	show_atr_s1(atr);
+	if (number == SPECIAL_NUM_ERR || number == (SPECIAL_NUM_ERR * 10) || (s16)(number & 0xFFFF) == SPECIAL_NUM_ERR) {
+		lcd_set_digit(display_buff, LCD_SYM_E, sb_s1[1]);
+		lcd_set_digit(display_buff, LCD_SYM_r, sb_s1[2]);
+		lcd_set_digit(display_buff, LCD_SYM_r, sb_s1[3]);
+		return;
+	}
 	if (number >= 999950) {
 		// "Hi"
 		lcd_set_digit(display_buff, SYMB_H, sb_s1[1]);

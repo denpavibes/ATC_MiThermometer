@@ -49,6 +49,8 @@ RAM u8 lcd_i2c_addr;
 #define LCD_SYM_i	0b00000100	// "i"
 #define LCD_SYM_L	0b10000101	// "L"
 #define LCD_SYM_o	0b11000110	// "o"
+#define LCD_SYM_E	0b10010111	// "E"
+#define LCD_SYM_r	0b00000110	// "r"
 
 #define LCD_SYM_BLE	BIT(7)	// BLE connect
 #define LCD_SYM_BAT	BIT(7)	// battery
@@ -202,7 +204,11 @@ __attribute__((optimize("-Os"))) void show_big_number_x10(s16 number){
 	display_buff[1] &= BIT(3); // Clear digit (except smiley contour)
 	display_buff[2] = 0;
 
-	if (number > 19995) {
+	if (number == SPECIAL_NUM_ERR) {
+		display_buff[0] |= LCD_SYM_E; // "E"
+		display_buff[1] |= LCD_SYM_r; // "r"
+		display_buff[2] |= LCD_SYM_r; // "r"
+	} else if (number > 19995) {
    		display_buff[0] |= LCD_SYM_H; // "H"
    		display_buff[1] |= LCD_SYM_i; // "i"
 	} else if (number < -995) {

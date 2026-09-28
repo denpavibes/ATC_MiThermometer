@@ -91,7 +91,7 @@ Now define how each digit maps to the segments:
     -----4-----
 */
 
-const u8 digits[16][DEF_MJWSD05MMC_SUMBOL_SIGMENTS + 1] = {
+const u8 digits[17][DEF_MJWSD05MMC_SUMBOL_SIGMENTS + 1] = {
     {1, 2, 3, 4, 5, 6, 0, 0}, // 0
     {2, 3, 0, 0, 0, 0, 0, 0}, // 1
     {1, 2, 4, 5, 7, 0, 0, 0}, // 2
@@ -107,8 +107,12 @@ const u8 digits[16][DEF_MJWSD05MMC_SUMBOL_SIGMENTS + 1] = {
     {1, 4, 5, 6, 0, 0, 0, 0}, // C
     {2, 3, 4, 5, 7, 0, 0, 0}, // d
     {1, 4, 5, 6, 7, 0, 0, 0}, // E
-    {1, 5, 6, 7, 0, 0, 0, 0}  // F
+    {1, 5, 6, 7, 0, 0, 0, 0}, // F
+    {5, 7, 0, 0, 0, 0, 0, 0}  // r
 };
+
+#define LCD_SYM_E	14
+#define LCD_SYM_r	16
 
 //----------------------------------
 // define segments
@@ -446,6 +450,12 @@ static void show_s1_number_x100(s32 number, u8 atr){
 	u8 buf[6] = {0};
 	clear_s1();
 	show_symbol_s1(atr);
+	if (number == (SPECIAL_NUM_ERR * 10) || ((s16)(number & 0xFFFF) == SPECIAL_NUM_ERR && (number < -4000 || number > 12500))) {
+		lcd_set_digit(display_buff, LCD_SYM_E, sb_s1[1]);
+		lcd_set_digit(display_buff, LCD_SYM_r, sb_s1[2]);
+		lcd_set_digit(display_buff, LCD_SYM_r, sb_s1[3]);
+		return;
+	}
 	if (number >= 1999950) {
 		// "Hi"
 		display_buff[1] |= BIT(3);

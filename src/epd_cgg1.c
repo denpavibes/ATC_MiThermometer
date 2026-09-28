@@ -55,7 +55,7 @@ Now define how each digit maps to the segments:
   8 :-----------: 6
 */
 
-const u8 digits[16][DEF_EPD_SUMBOL_SIGMENTS + 1] = {
+const u8 digits[17][DEF_EPD_SUMBOL_SIGMENTS + 1] = {
     {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 0, 0},  // 0
     {2, 3, 4, 5, 6, 0, 0, 0, 0, 0, 0, 0, 0},        // 1
     {1, 2, 3, 4, 6, 7, 8, 9, 10, 12, 13, 0, 0, 0},  // 2
@@ -71,8 +71,12 @@ const u8 digits[16][DEF_EPD_SUMBOL_SIGMENTS + 1] = {
     {1, 2, 6, 7, 8, 9, 10, 11, 12, 0, 0, 0, 0, 0},  // C
     {2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 0, 0, 0},  // d
     {1, 2, 4, 6, 7, 8, 9, 10, 11, 12, 0, 0, 0, 0},  // E
-    {1, 2, 8, 9, 10, 11, 12, 13, 0, 0, 0, 0, 0, 0}  // F
+    {1, 2, 8, 9, 10, 11, 12, 13, 0, 0, 0, 0, 0, 0}, // F
+    {8, 9, 10, 13, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}    // r
 };
+
+#define LCD_SYM_E	14
+#define LCD_SYM_r	16
 
 /* 0x00 = "  "
  * 0x20 = "°Г"
@@ -220,7 +224,11 @@ void show_big_number_x10(s16 number){
 	display_buff[13] &= ~BIT(0);
 	display_buff[14] &= ~(BIT(4) | BIT(5) | BIT(6) | BIT(7));
 	display_buff[15] &= ~(BIT(1) | BIT(2) | BIT(3) | BIT(4) | BIT(5));
-	if (number > 19995) {
+	if (number == SPECIAL_NUM_ERR) {
+		epd_set_digit(display_buff, LCD_SYM_E, top_left);   // 'E'
+		epd_set_digit(display_buff, LCD_SYM_r, top_middle); // 'r'
+		epd_set_digit(display_buff, LCD_SYM_r, top_right);  // 'r'
+	} else if (number > 19995) {
 		// "Hi"
 		display_buff[13] |= BIT(0);
 		display_buff[14] |= BIT(4) | BIT(5) | BIT(6) | BIT(7);

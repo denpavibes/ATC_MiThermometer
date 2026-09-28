@@ -67,6 +67,10 @@ const u8 display_numbers[] = {
 #define LCD_SYM1_A  0b01110111 // "A"
 #define LCD_SYM1_a  0b11110110 // "a"
 #define LCD_SYM1_P  0b00110111 // "P"
+#define LCD_SYM1_E  0b10010111 // "E"
+#define LCD_SYM1_r  0b00000110 // "r"
+#define LCD_SYM_E   LCD_SYM1_E
+#define LCD_SYM_r   LCD_SYM1_r
 
 const u8 display_small_numbers[] = {
         //76543210
@@ -211,7 +215,11 @@ _attribute_ram_code_
 __attribute__((optimize("-Os"))) void show_big_number_x10(s16 number){
 	display_buff[4] &= BIT(3);
 	display_buff[5] = 0;
-	if (number > 19995) {
+	if (number == SPECIAL_NUM_ERR) {
+		display_buff[5] = LCD_SYM1_E; // 'E'
+		display_buff[4] |= LCD_SYM1_r; // 'r'
+		display_buff[3] = LCD_SYM1_r; // 'r'
+	} else if (number > 19995) {
    		display_buff[4] = LCD_SYM1_H; // "H"
    		display_buff[3] = LCD_SYM1_i; // "i"
 	} else if (number < -995) {

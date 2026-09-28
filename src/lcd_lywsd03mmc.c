@@ -43,6 +43,8 @@ RAM u8 lcd_i2c_addr;
 #define LCD_SYM_i	0x40	// "i"
 #define LCD_SYM_L	0xE0	// "L"
 #define LCD_SYM_o	0xC6	// "o"
+#define LCD_SYM_E	0x4F	// "E"
+#define LCD_SYM_r	0x44	// "r"
 
 #define LCD_SYM_BLE	0x10	// connect
 #define LCD_SYM_BAT	0x08	// battery
@@ -450,7 +452,11 @@ void show_battery_symbol(bool state){
 _attribute_ram_code_
 __attribute__((optimize("-Os"))) void show_big_number_x10(s16 number){
 //	display_buff[4] = point?0x08:0x00;
-	if (number > 19995) {
+	if (number == SPECIAL_NUM_ERR) {
+		display_buff[3] = LCD_SYM_r; // "r"
+		display_buff[4] = LCD_SYM_r; // "r"
+		display_buff[5] = LCD_SYM_E; // "E"
+	} else if (number > 19995) {
    		display_buff[3] = 0;
    		display_buff[4] = LCD_SYM_i; // "i"
    		display_buff[5] = LCD_SYM_H; // "H"

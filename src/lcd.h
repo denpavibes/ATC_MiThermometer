@@ -49,6 +49,8 @@ extern lcd_flg_t lcd_flg;
 
 extern u8 lcd_i2c_addr; // LCD controller I2C address
 
+#define SPECIAL_NUM_ERR (-1000) // -100.0 -> "Err"
+
 #if  !((DEVICE_TYPE == DEVICE_MJWSD05MMC) || (DEVICE_TYPE == DEVICE_MJWSD05MMC_EN) || (DEVICE_TYPE == DEVICE_LYWSD02MMC))
 /* CGG1 no symbol 'smiley' ! */
 #define SMILE_HAPPY 5 		// "(^-^)" happy

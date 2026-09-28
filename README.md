@@ -26,7 +26,11 @@ This fork turns the thermometer into an efficient, responsive wireless screen:
    - Invokes `SET_LCD_UPDATE()` immediately when `CMD_ID_EXTDATA` is received over BLE.
    - Screen content redraws instantly upon transmission rather than waiting up to 2.5–5 seconds for the internal cadence timer.
 
-3. **Modern CMake Build System**:
+3. **Dedicated Error Display ("Err")**:
+   - Sending `-100` as the big number (e.g., `it.print_bignum(-100)` in ESPHome) displays `"Err"` across all supported LCD and E-Ink display models instead of a standard numerical value or `"Lo"`.
+   - The small number field remains available to display numeric error codes (e.g., `it.print_smallnum(1)`).
+
+4. **Modern CMake Build System**:
    - Replaced legacy Telink IoT Studio Eclipse configuration with a modern CMake toolchain (`tc32-elf-gcc`).
    - Clean VS Code build/clean tasks and submodule-based SDK dependency management.
 
@@ -54,6 +58,12 @@ display:
     update_interval: never # Updates triggered on-demand via script
     validity_period: 300s  # Must exceed the sensor heartbeat interval
     lambda: |-
+      if (isnan(id(power_usage).state)) {
+        it.print_bignum(-100); // Displays "Err" on screen
+        it.print_smallnum(1);  // Error code
+        it.print_sad();
+        return;
+      }
       it.print_bignum(id(power_usage).state);
       it.print_unit(pvvx_mithermometer::UNIT_NONE);
       it.print_smallnum(id(outside_temp).state);

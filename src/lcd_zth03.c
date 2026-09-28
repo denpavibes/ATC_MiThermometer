@@ -72,6 +72,8 @@ const u8 display_numbers[] = {
 #define LCD_SYM_A  0b001110111 // "A"
 #define LCD_SYM_a  0b011110110 // "a"
 #define LCD_SYM_P  0b001110101 // "P"
+#define LCD_SYM_E  0b011110100 // "E"
+#define LCD_SYM_r  0b000100100 // "r"
 
 #define LCD_SYM_BLE	0x08	// connect
 #define LCD_SYM_BAT	0x40	// battery
@@ -265,7 +267,11 @@ __attribute__((optimize("-Os")))
 void show_big_number_x10(s16 number){
 	display_buff[3] &= ~BIT(3); // "-"
 	display_buff[2] = 0;
-	if (number > 19995) {
+	if (number == SPECIAL_NUM_ERR) {
+		display_buff[0] = LCD_SYM_E; // "E"
+		display_buff[1] = LCD_SYM_r; // "r"
+		display_buff[2] = LCD_SYM_r; // "r"
+	} else if (number > 19995) {
 	   		display_buff[0] = LCD_SYM_H; // "H"
 	   		display_buff[1] = LCD_SYM_i; // "i"
 		} else if (number < -19995) {

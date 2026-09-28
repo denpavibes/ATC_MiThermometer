@@ -45,6 +45,8 @@ None: 3.2, 3.3
 #define LCD_SYM_i	0x40	// "i"
 #define LCD_SYM_L	0xE0	// "L"
 #define LCD_SYM_o	0xC6	// "o"
+#define LCD_SYM_E	0xF2	// "E"
+#define LCD_SYM_r	0x42	// "r"
 
 /* 0,1,2,3,4,5,6,7,8,9,A,b,C,d,E,F*/
 const u8 display_numbers[] = {
@@ -193,7 +195,11 @@ void show_battery_symbol(bool state){
 _attribute_ram_code_
 void show_big_number_x10(s16 number){
 	display_buff[2] &= BIT(3); // "_" F
-	if (number > 19995) {
+	if (number == SPECIAL_NUM_ERR) {
+		display_buff[0] = LCD_SYM_E; // "E"
+		display_buff[1] = LCD_SYM_r; // "r"
+		display_buff[2] |= LCD_SYM_r; // "r"
+	} else if (number > 19995) {
    		display_buff[0] = LCD_SYM_H; // "H"
    		display_buff[1] = LCD_SYM_i; // "i"
 	} else if (number < -995) {
