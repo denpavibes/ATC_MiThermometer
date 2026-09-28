@@ -193,12 +193,13 @@ int get_adc_rh_ntc(void) {
 	gpio_setup_up_down_resistor(GPIO_RHI, PM_PIN_PULLDOWN_100K);
 
 	// компенсация диода
-	if(measured_data.battery_mv < 3300)
+	if(measured_data.battery_mv < 3300) {
 		adc_uint *= 0x10000 + (3300 - measured_data.battery_mv)*10; // 0.07*65536/1000 = 4.58752
-	else
+	} else {
 		adc_uint <<= 16; // без компенсации
+	}
 
-	adc_uint /= adc_uz;
+	adc_uint /= adc_uz; // ADC(rh)*(0x10000 + (3300 - Vbat_mv)*10) / ADC(+Vbat - Udiode)
 	sensor_cfg.adc_rh = adc_uint;
 	if(sensor_cfg.id == 2) { // Calibrate to 100%
 		// Calibrate 100% (ADC zero)
@@ -252,6 +253,7 @@ int get_adc_rh_ntc(void) {
 		adc_uint = sensor_cfg.summ_rh / sensor_cfg.cnt_summ;
 	}
 #endif
+	// RH in 0.01% =  (35020  - (((ADC(rh)*(0x10000 + (3300 - Vbat_mv)*10)/ ADC(vbat-diode) - val2_z)* (val2_k >> 13)) >> 16)) pow 3;
 	measured_data.humi = adc_uint;
 	return 0;
 }

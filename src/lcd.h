@@ -305,6 +305,7 @@ void show_small_number(s16 number, bool percent); // -9 .. 99
 void init_lcd(void);
 void lcd(void);
 void update_lcd(void);
+void reinit_lcd(void);
 //void show_battery_symbol(bool state);
 void show_ble_symbol(bool state);
 void show_low_bat(void);

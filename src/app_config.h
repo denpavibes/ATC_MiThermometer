@@ -81,10 +81,8 @@ extern "C" {
 //#define DEVICE_ZG204ZV2		57 // ZigBee only, HOBEIAN-ZG-204ZV without T&H, LUX + Radar Sensor XBR818
 //#define DEVICE_NEXT			58 // ?
 
-#define TEST_PLM1 			0  // TB03F My Plant monitor
-
 #ifndef DEVICE_TYPE
-#define DEVICE_TYPE			DEVICE_MJWSD05MMC_EN
+#define DEVICE_TYPE			DEVICE_LYWSD02MMC
 #endif
 
 // supported services by the device (bits)

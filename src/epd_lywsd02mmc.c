@@ -741,6 +741,8 @@ void lcd(void) {
 			show_smiley(cfg.flg2.smiley);
 		if(cfg.flg.show_battery || measured_data.battery_level < 16)
 			show_battery_symbol(1);
+		else
+			show_battery_symbol(0);
 	}
 	if(cfg.flg.show_battery) {
 		show_s2_number(measured_data.battery_level, 1);
